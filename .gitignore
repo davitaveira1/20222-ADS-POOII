@@ -21,3 +21,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/20222-POOII-producao-Aula02/build/
+/20222-POOII-producao-Aula04/nbproject/private/
+/20222-POOII-producao-Aula04/build/
