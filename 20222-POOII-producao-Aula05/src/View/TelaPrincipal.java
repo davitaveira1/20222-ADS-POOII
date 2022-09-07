@@ -195,6 +195,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getTableModel();
         modelo.addRow(new Object[]{a.getNome(),a.getIdade()});
         
+        //limpar os campos
+        campoNome.setText("");
+        campoIdade.setText("");
+        
+         //setar cursor no campo nome
+         campoNome.requestFocus();
+                 
+        
         
     }//GEN-LAST:event_btCadastrarActionPerformed
 
