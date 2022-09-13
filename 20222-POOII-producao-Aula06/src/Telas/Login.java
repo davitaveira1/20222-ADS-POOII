@@ -120,7 +120,9 @@ public class Login extends javax.swing.JFrame {
         String senhaDigitada = c_senha.getText();
         
         if(loginDigitado.equals("admin")&&(senhaDigitada.equals("123"))){
-            new TelaPrincipal().setVisible(true);
+            TelaPrincipal tp = new TelaPrincipal();
+            tp.lb_usuario.setText("Seja bem-vindo "+loginDigitado);
+            tp.setVisible(true);
             dispose();
         }else{
             JOptionPane.showMessageDialog(null,"User/senha inválido!");
