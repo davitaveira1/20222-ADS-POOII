@@ -4,6 +4,7 @@
  */
 package Telas;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,18 +14,47 @@ import javax.swing.table.DefaultTableModel;
 public class TelaGestaoClientes extends javax.swing.JFrame {
 
     DefaultTableModel modelo;
+    String modo;
 
     /**
      * Creates new form TelaGestaoClientes
      */
     public TelaGestaoClientes() {
         initComponents();
+        modo = "inicio";
+        manipularInterface();
+        
         getTableModel();
-        modelo.addRow(new Object[]{"Davi","Taveira",38});
+        modelo.addRow(new Object[]{"Davi", "Taveira", 38});
+        modelo.addRow(new Object[]{"Daniel", "Taveira", 20});
+        modelo.addRow(new Object[]{"Lucas", "Taveira", 25});
+        modelo.addRow(new Object[]{"Ricardo", "Santos", 30});
+
+
     }
 
     public void getTableModel() {
         modelo = (DefaultTableModel) tb_clientes.getModel();
+    }
+
+    public void manipularInterface() {
+        switch (modo) {
+            case "inicio":
+                bt_cli_novo.setEnabled(true);
+                bt_cli_editar.setEnabled(false);
+                bt_cli_excluir.setEnabled(false);
+
+                c_cli_nome.setEnabled(false);
+                c_cli_sobrenome.setEnabled(false);
+                c_cli_idade.setEnabled(false);
+
+                bt_cli_salvar.setEnabled(false);
+                bt_cli_cancelar.setEnabled(false);
+                break;
+                
+            default:
+                JOptionPane.showMessageDialog(null,"Modo inválido!!");
+        }
     }
 
     /**
@@ -62,10 +92,7 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
 
         tb_clientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Nome", "Sobrenome", "Idade"
