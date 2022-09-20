@@ -64,6 +64,19 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
                 bt_cli_salvar.setEnabled(true);
                 bt_cli_cancelar.setEnabled(true); 
                 break;
+
+            case "linhaTabelaSelecionada":
+                bt_cli_novo.setEnabled(true);
+                bt_cli_editar.setEnabled(true);
+                bt_cli_excluir.setEnabled(true);
+
+                c_cli_nome.setEnabled(false);
+                c_cli_sobrenome.setEnabled(false);
+                c_cli_idade.setEnabled(false);
+
+                bt_cli_salvar.setEnabled(false);
+                bt_cli_cancelar.setEnabled(false); 
+                break;                
                 
             default:
                 JOptionPane.showMessageDialog(null,"Modo inválido!!");
@@ -117,6 +130,11 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        tb_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb_clientesMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tb_clientes);
@@ -239,6 +257,12 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         modo="novo";
         manipularInterface();
     }//GEN-LAST:event_bt_cli_novoActionPerformed
+
+    private void tb_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_clientesMouseClicked
+        // TODO add your handling code here:
+        modo="linhaTabelaSelecionada";
+        manipularInterface();
+    }//GEN-LAST:event_tb_clientesMouseClicked
 
     /**
      * @param args the command line arguments
