@@ -15,6 +15,7 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
 
     DefaultTableModel modelo;
     String modo;
+    int linha;
 
     /**
      * Creates new form TelaGestaoClientes
@@ -262,6 +263,21 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         // TODO add your handling code here:
         modo="linhaTabelaSelecionada";
         manipularInterface();
+        
+        linha = tb_clientes.getSelectedRow();
+        
+        //JOptionPane.showMessageDialog(null,"Linha selecionada: "+linha);
+        
+        getTableModel();
+        String nome = String.valueOf(modelo.getValueAt(linha,0));
+        String sobrenome = String.valueOf(modelo.getValueAt(linha,1));
+        int idade = Integer.valueOf(String.valueOf(modelo.getValueAt(linha,2)));
+        
+        c_cli_nome.setText(nome);
+        c_cli_sobrenome.setText(sobrenome);
+        c_cli_idade.setText(Integer.toString(idade));
+        
+        
     }//GEN-LAST:event_tb_clientesMouseClicked
 
     /**
