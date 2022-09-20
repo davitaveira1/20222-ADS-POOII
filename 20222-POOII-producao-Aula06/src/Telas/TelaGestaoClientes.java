@@ -52,6 +52,19 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
                 bt_cli_cancelar.setEnabled(false);
                 break;
                 
+            case "novo":
+                bt_cli_novo.setEnabled(false);
+                bt_cli_editar.setEnabled(false);
+                bt_cli_excluir.setEnabled(false);
+
+                c_cli_nome.setEnabled(true);
+                c_cli_sobrenome.setEnabled(true);
+                c_cli_idade.setEnabled(true);
+
+                bt_cli_salvar.setEnabled(true);
+                bt_cli_cancelar.setEnabled(true); 
+                break;
+                
             default:
                 JOptionPane.showMessageDialog(null,"Modo inválido!!");
         }
@@ -128,6 +141,11 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 5));
 
         bt_cli_novo.setText("Novo");
+        bt_cli_novo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cli_novoActionPerformed(evt);
+            }
+        });
         jPanel3.add(bt_cli_novo);
 
         bt_cli_editar.setText("Editar");
@@ -215,6 +233,12 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bt_cli_novoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cli_novoActionPerformed
+        // TODO add your handling code here:
+        modo="novo";
+        manipularInterface();
+    }//GEN-LAST:event_bt_cli_novoActionPerformed
 
     /**
      * @param args the command line arguments
