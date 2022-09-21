@@ -197,6 +197,11 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         jPanel3.add(bt_cli_editar);
 
         bt_cli_excluir.setText("Excluir");
+        bt_cli_excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cli_excluirActionPerformed(evt);
+            }
+        });
         jPanel3.add(bt_cli_excluir);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Dados"));
@@ -344,8 +349,30 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
             modo="linhaTabelaSelecionada";
             manipularInterface();
         }
+        
+        if(modo=="novo"){
+            String novoNome = c_cli_nome.getText();
+            String novoSobrenome = c_cli_sobrenome.getText();
+            int novaIdade = Integer.valueOf(c_cli_idade.getText());
+            modelo.addRow(new Object[]{novoNome,novoSobrenome,novaIdade});
+            modo="inicio";
+            manipularInterface();
+            limparCampos();
+        }
 
     }//GEN-LAST:event_bt_cli_salvarActionPerformed
+
+    private void bt_cli_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cli_excluirActionPerformed
+        // TODO add your handling code here:
+        int confirma = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja excluir o cliente "+c_cli_nome.getText(),"Atenção!",JOptionPane.YES_NO_OPTION);
+        if(confirma == JOptionPane.YES_OPTION){
+            linha = tb_clientes.getSelectedRow();
+            modelo.removeRow(linha);
+            modo="inicio";
+            manipularInterface();
+            limparCampos();            
+        }
+    }//GEN-LAST:event_bt_cli_excluirActionPerformed
 
     /**
      * @param args the command line arguments
