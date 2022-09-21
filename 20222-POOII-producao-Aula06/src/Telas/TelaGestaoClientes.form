@@ -161,6 +161,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Editar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_cli_editarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="bt_cli_excluir">
           <Properties>
@@ -257,11 +260,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Salvar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_cli_salvarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="bt_cli_cancelar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_cli_cancelarActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

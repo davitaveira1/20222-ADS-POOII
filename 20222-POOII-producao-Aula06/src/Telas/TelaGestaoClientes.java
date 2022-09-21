@@ -24,13 +24,12 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         initComponents();
         modo = "inicio";
         manipularInterface();
-        
+
         getTableModel();
         modelo.addRow(new Object[]{"Davi", "Taveira", 38});
         modelo.addRow(new Object[]{"Daniel", "Taveira", 20});
         modelo.addRow(new Object[]{"Lucas", "Taveira", 25});
         modelo.addRow(new Object[]{"Ricardo", "Santos", 30});
-
 
     }
 
@@ -40,6 +39,7 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
 
     public void manipularInterface() {
         switch (modo) {
+            case "cancelar":
             case "inicio":
                 bt_cli_novo.setEnabled(true);
                 bt_cli_editar.setEnabled(false);
@@ -52,8 +52,9 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
                 bt_cli_salvar.setEnabled(false);
                 bt_cli_cancelar.setEnabled(false);
                 break;
-                
+
             case "novo":
+                limparCampos();
                 bt_cli_novo.setEnabled(false);
                 bt_cli_editar.setEnabled(false);
                 bt_cli_excluir.setEnabled(false);
@@ -63,7 +64,7 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
                 c_cli_idade.setEnabled(true);
 
                 bt_cli_salvar.setEnabled(true);
-                bt_cli_cancelar.setEnabled(true); 
+                bt_cli_cancelar.setEnabled(true);
                 break;
 
             case "linhaTabelaSelecionada":
@@ -76,12 +77,32 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
                 c_cli_idade.setEnabled(false);
 
                 bt_cli_salvar.setEnabled(false);
-                bt_cli_cancelar.setEnabled(false); 
-                break;                
-                
+                bt_cli_cancelar.setEnabled(false);
+                break;
+
+            case "editar":
+                bt_cli_novo.setEnabled(false);
+                bt_cli_editar.setEnabled(false);
+                bt_cli_excluir.setEnabled(true);
+
+                c_cli_nome.setEnabled(true);
+                c_cli_sobrenome.setEnabled(true);
+                c_cli_idade.setEnabled(true);
+
+                bt_cli_salvar.setEnabled(true);
+                bt_cli_cancelar.setEnabled(true);
+                break;
+
             default:
-                JOptionPane.showMessageDialog(null,"Modo inválido!!");
+                JOptionPane.showMessageDialog(null, "Modo inválido!!");
         }
+    }
+
+    public void limparCampos() {
+        c_cli_nome.setText("");
+        c_cli_sobrenome.setText("");
+        c_cli_idade.setText("");
+        c_cli_nome.requestFocus();
     }
 
     /**
@@ -168,6 +189,11 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         jPanel3.add(bt_cli_novo);
 
         bt_cli_editar.setText("Editar");
+        bt_cli_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cli_editarActionPerformed(evt);
+            }
+        });
         jPanel3.add(bt_cli_editar);
 
         bt_cli_excluir.setText("Excluir");
@@ -217,9 +243,19 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
         );
 
         bt_cli_salvar.setText("Salvar");
+        bt_cli_salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cli_salvarActionPerformed(evt);
+            }
+        });
         jPanel5.add(bt_cli_salvar);
 
         bt_cli_cancelar.setText("Cancelar");
+        bt_cli_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cli_cancelarActionPerformed(evt);
+            }
+        });
         jPanel5.add(bt_cli_cancelar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -255,30 +291,61 @@ public class TelaGestaoClientes extends javax.swing.JFrame {
 
     private void bt_cli_novoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cli_novoActionPerformed
         // TODO add your handling code here:
-        modo="novo";
+        modo = "novo";
         manipularInterface();
     }//GEN-LAST:event_bt_cli_novoActionPerformed
 
     private void tb_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_clientesMouseClicked
         // TODO add your handling code here:
-        modo="linhaTabelaSelecionada";
+        modo = "linhaTabelaSelecionada";
         manipularInterface();
-        
+
         linha = tb_clientes.getSelectedRow();
-        
-        //JOptionPane.showMessageDialog(null,"Linha selecionada: "+linha);
-        
+
         getTableModel();
-        String nome = String.valueOf(modelo.getValueAt(linha,0));
-        String sobrenome = String.valueOf(modelo.getValueAt(linha,1));
-        int idade = Integer.valueOf(String.valueOf(modelo.getValueAt(linha,2)));
-        
+        String nome = (String) modelo.getValueAt(linha, 0);
+        String sobrenome = (String) modelo.getValueAt(linha, 1);
+        int idade = (Integer) modelo.getValueAt(linha, 2);
+
         c_cli_nome.setText(nome);
         c_cli_sobrenome.setText(sobrenome);
         c_cli_idade.setText(Integer.toString(idade));
-        
-        
+
+
     }//GEN-LAST:event_tb_clientesMouseClicked
+
+    private void bt_cli_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cli_editarActionPerformed
+        // TODO add your handling code here:
+        modo = "editar";
+        manipularInterface();
+
+
+    }//GEN-LAST:event_bt_cli_editarActionPerformed
+
+    private void bt_cli_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cli_cancelarActionPerformed
+        // TODO add your handling code here:
+        modo = "cancelar";
+        manipularInterface();
+    }//GEN-LAST:event_bt_cli_cancelarActionPerformed
+
+    private void bt_cli_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cli_salvarActionPerformed
+        // TODO add your handling code here:
+        if (modo == "editar") {
+            linha = tb_clientes.getSelectedRow();
+
+            String novoNome = c_cli_nome.getText();
+            String novoSobrenome = c_cli_sobrenome.getText();
+            int novaIdade = Integer.valueOf(c_cli_idade.getText());
+
+            modelo.setValueAt(novoNome, linha, 0);
+            modelo.setValueAt(novoSobrenome, linha, 1);
+            modelo.setValueAt(novaIdade, linha, 2);
+            
+            modo="linhaTabelaSelecionada";
+            manipularInterface();
+        }
+
+    }//GEN-LAST:event_bt_cli_salvarActionPerformed
 
     /**
      * @param args the command line arguments
