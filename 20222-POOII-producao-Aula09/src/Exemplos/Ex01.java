@@ -41,7 +41,7 @@ public class Ex01 {
         
         Ex01 e = new Ex01();
        
-        Produto p = new Produto("Computador", 20, 1200);
+        Produto p = new Produto(1,"Computador", 20, 1200);
         e.inserir(p);
         
         
