@@ -5,7 +5,9 @@
 package View;
 
 import Control.controlaProdutos;
+import Control.controlaProdutosDAO;
 import Model.Produto;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -27,6 +29,8 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
     Produto p;
     Produto produtoListaExistente;
 
+    controlaProdutosDAO controlaProdutoBD = new controlaProdutosDAO();
+
     /**
      * Creates new form TelaGestaoClientes
      */
@@ -35,12 +39,16 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
         modo = "inicio";
         manipularInterface();
 
-        getTableModel();
+        preencherTabelaBD();
+
+
+        /*
         modelo.addRow(new Object[]{1, "Pizza", 67, 11.68});
         modelo.addRow(new Object[]{2, "Coca-cola 2Lt", 122, 6.40});
         modelo.addRow(new Object[]{3, "Detergente", 50, 1.45});
         modelo.addRow(new Object[]{4, "Amaciante 1Lt", 34, 5.20});
-
+         */
+ /*
         codigo = controlaProdutos.ultimoCodigo(lista);
         Produto p1 = new Produto(codigo, "Pizza", 67, 11.68);
         controlaProdutos.adicionar(lista, p1);
@@ -55,7 +63,29 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
         controlaProdutos.adicionar(lista, p4);
 
         controlaProdutos.imprimir(lista);
+         */
+    }
+    
+    public void preencherTabelaBD(){
+        getTableModel();
+        
+        //limpar a tabela
+        modelo.setNumRows(0);
+        controlaProdutoBD.rs = controlaProdutoBD.selecionarProdutos();
+        
+        
+        try {
+            while (controlaProdutoBD.rs.next()) {
+                modelo.addRow(new Object[]{
+                    controlaProdutoBD.rs.getInt(1),
+                    controlaProdutoBD.rs.getString(2),
+                    controlaProdutoBD.rs.getInt(3),
+                    controlaProdutoBD.rs.getDouble(4)
 
+                });
+            }
+        } catch (Exception e) {
+        }        
     }
 
     public void getTableModel() {
@@ -394,7 +424,15 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
         modo = "novo";
         manipularInterface();
         //preencher campo código automaticamente
-        c_prod_codigo.setText(String.valueOf(controlaProdutos.ultimoCodigo(lista)));
+        try {
+            controlaProdutoBD.rs.last();
+            codigo = controlaProdutoBD.rs.getInt(1)+1;
+            JOptionPane.showMessageDialog(null,"Codigo novo: "+codigo);
+            
+        } catch (Exception e) {
+        }
+
+        c_prod_codigo.setText(String.valueOf(codigo));
 
         c_prod_nome.setText("");
         c_prod_estoque.setText("");
@@ -454,16 +492,23 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
             novoNome = c_prod_nome.getText();
             novoEstoque = Integer.valueOf(c_prod_estoque.getText());
             novoPreco = Double.valueOf(c_prod_preco.getText());
-            modelo.addRow(new Object[]{codigo, novoNome, novoEstoque, novoPreco});
+            //modelo.addRow(new Object[]{codigo, novoNome, novoEstoque, novoPreco});
 
             //montar objeto
             p = new Produto(codigo, novoNome, novoEstoque, novoPreco);
             //adicionar na lista            
-            controlaProdutos.adicionar(lista, p);
+            //controlaProdutos.adicionar(lista, p);
+            
+            //adicionar no BD
+            controlaProdutoBD.inserirProduto(p);
+            
+            preencherTabelaBD();
+            
             //ajuste de interface
             modo = "inicio";
             manipularInterface();
             limparCampos();
+            
         }
 
     }//GEN-LAST:event_bt_prod_salvarActionPerformed
@@ -482,17 +527,17 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
             //percorrer a tabela para encontrar a linha do produto
             int nroLinhasTabela = tb_prod.getRowCount();
             for (int i = 0; i < nroLinhasTabela; i++) {
-                System.out.println("Campo codigo tb: "+tb_prod.getValueAt(i,0)+" codigo form: "+codigo);
+                System.out.println("Campo codigo tb: " + tb_prod.getValueAt(i, 0) + " codigo form: " + codigo);
                 if (tb_prod.getValueAt(i, 0).equals(codigo)) {
                     linhaProduto = i;
-                    System.out.println("Linha do produto: "+linhaProduto);
+                    System.out.println("Linha do produto: " + linhaProduto);
                 }
             }
 
             controlaProdutos.excluir(lista, linhaProduto);
-            
+
             //removendo da tabela
-            modelo.removeRow(linha);            
+            modelo.removeRow(linha);
             //manipular interface
             modo = "inicio";
             manipularInterface();
@@ -555,10 +600,10 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         System.out.println("\n\n\n\n\n\n\n");
-        System.out.println("===================");      
+        System.out.println("===================");
         //imprimir lista
         controlaProdutos.imprimir(lista);
-              
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
