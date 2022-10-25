@@ -59,9 +59,69 @@ public class controlaProdutosDAO {
             }
             
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Erro: "+ e);
         }
         
     }
+    
+    public void alterarProduto(Produto p){
+        
+        try {
+            
+            conn = conexao.getConnection();
+            pst = conn.prepareStatement("update produtos set nome=?,estoque=?,precoUnitario=?"
+                    + " where codigo=?");
+            
+            pst.setString(1, p.getNome());
+            pst.setInt(2, p.getQuantidade());
+            pst.setDouble(3, p.getPreco());
+            pst.setInt(4,p.getCodigo());
+            
+            int linha = pst.executeUpdate();
+            if(linha>0){
+                JOptionPane.showMessageDialog(null,"Alteração realizada!");
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Erro: "+ e);
+        }        
+        
+    }
+    
+    public void excluirProduto(int codigo){
+
+        try {
+            
+            conn = conexao.getConnection();
+            pst = conn.prepareStatement("delete from produtos where codigo=?");
+            
+            pst.setInt(1,codigo);
+            
+            int linha = pst.executeUpdate();
+            if(linha>0){
+                JOptionPane.showMessageDialog(null,"Exclusão realizada!");
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Erro: "+ e);
+        }
+        
+    }
+    
+    public ResultSet selecionarProduto(int codigo){
+        try {
+            conn = conexao.getConnection();
+            st = conn.createStatement();
+            rs = st.executeQuery("select * from produtos where codigo="+codigo+"");
+            
+            
+        } catch (Exception e) {
+            
+            JOptionPane.showMessageDialog(null,"Erro: "+ e);
+        }
+        
+        return rs;
+    }    
     
 
     

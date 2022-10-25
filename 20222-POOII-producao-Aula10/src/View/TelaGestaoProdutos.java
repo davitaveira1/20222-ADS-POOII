@@ -65,15 +65,14 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
         controlaProdutos.imprimir(lista);
          */
     }
-    
-    public void preencherTabelaBD(){
+
+    public void preencherTabelaBD() {
         getTableModel();
-        
+
         //limpar a tabela
         modelo.setNumRows(0);
         controlaProdutoBD.rs = controlaProdutoBD.selecionarProdutos();
-        
-        
+
         try {
             while (controlaProdutoBD.rs.next()) {
                 modelo.addRow(new Object[]{
@@ -85,7 +84,7 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
                 });
             }
         } catch (Exception e) {
-        }        
+        }
     }
 
     public void getTableModel() {
@@ -426,9 +425,9 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
         //preencher campo código automaticamente
         try {
             controlaProdutoBD.rs.last();
-            codigo = controlaProdutoBD.rs.getInt(1)+1;
-            JOptionPane.showMessageDialog(null,"Codigo novo: "+codigo);
-            
+            codigo = controlaProdutoBD.rs.getInt(1) + 1;
+            JOptionPane.showMessageDialog(null, "Codigo novo: " + codigo);
+
         } catch (Exception e) {
         }
 
@@ -472,6 +471,7 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
             modelo.setValueAt(novoEstoque, linha, 2);
             modelo.setValueAt(novoPreco, linha, 3);
 
+            /*
             //buscar objeto na lista
             produtoListaExistente = controlaProdutos.buscarProduto(lista, codigo - 1);
             //editar objeto na lista
@@ -480,6 +480,12 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
             produtoListaExistente.setPreco(novoPreco);
             //imprimir lista
             controlaProdutos.imprimir(lista);
+             */
+            //criar produto
+            p = new Produto(codigo, novoNome, novoEstoque, novoPreco);
+
+            //alterar no BD
+            controlaProdutoBD.alterarProduto(p);
 
             //ajuste de interface            
             modo = "linhaTabelaSelecionada";
@@ -498,17 +504,17 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
             p = new Produto(codigo, novoNome, novoEstoque, novoPreco);
             //adicionar na lista            
             //controlaProdutos.adicionar(lista, p);
-            
+
             //adicionar no BD
             controlaProdutoBD.inserirProduto(p);
-            
+
             preencherTabelaBD();
-            
+
             //ajuste de interface
             modo = "inicio";
             manipularInterface();
             limparCampos();
-            
+
         }
 
     }//GEN-LAST:event_bt_prod_salvarActionPerformed
@@ -534,7 +540,9 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
                 }
             }
 
-            controlaProdutos.excluir(lista, linhaProduto);
+            //controlaProdutos.excluir(lista, linhaProduto);
+            //excluir do BD
+            controlaProdutoBD.excluirProduto(codigo);
 
             //removendo da tabela
             modelo.removeRow(linha);
@@ -589,11 +597,21 @@ public class TelaGestaoProdutos extends javax.swing.JFrame {
         tb_prod.setRowSelectionInterval(linhaProduto, linhaProduto);
 
         //buscar objeto na lista
-        produtoListaExistente = controlaProdutos.buscarProduto(lista, linhaProduto);
-        //preencher formulário
-        c_prod_nome.setText(produtoListaExistente.getNome());
-        c_prod_estoque.setText(Integer.toString(produtoListaExistente.getQuantidade()));
-        c_prod_preco.setText(Double.toString(produtoListaExistente.getPreco()));
+        //produtoListaExistente = controlaProdutos.buscarProduto(lista, linhaProduto);
+        //buscar produto do BD
+        try {
+
+            controlaProdutoBD.rs = controlaProdutoBD.selecionarProduto(codigo);
+            controlaProdutoBD.rs.next();
+            //preencher formulário
+            c_prod_nome.setText(controlaProdutoBD.rs.getString(2));
+            c_prod_estoque.setText(Integer.toString(controlaProdutoBD.rs.getInt(3)));
+            c_prod_preco.setText(Double.toString(controlaProdutoBD.rs.getDouble(4)));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro: " + e);
+        }
+
 
     }//GEN-LAST:event_bt_prod_buscarActionPerformed
 
